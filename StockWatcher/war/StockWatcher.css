@@ -1,34 +1,56 @@
 /** Add css rules here for your application. */
-
-
-/** Example rules used by the template application (remove for your app) */
-h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
-  text-align: center;
+body {
+	padding: 10px;
 }
 
-.sendButton {
-  display: block;
-  font-size: 16pt;
+/* stock list header row */
+.watchListHeader {
+	background-color: #B2F6E2;
+	color: black;
+	font-style: italic;
+	font-weight: bold;
 }
 
-/** Most GWT widgets already have a style name defined */
-.gwt-DialogBox {
-  width: 400px;
+.watchList {
+	border: 1px solid silver;
+	padding: 2px;
+	margin-bottom: 6px;
 }
 
-.dialogVPanel {
-  margin: 5px;
+.watchListPriceColumn {
+	text-align: right;
+	width: 4em;
 }
 
-.serverResponseLabelError {
-  color: red;
+.watchListChangeColumn {
+	text-align: right;
+	width: 8em;
 }
 
-/** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
-  margin: 15px 6px 6px;
+.watchListRemoveColumn {
+	text-align: center;
+}
+
+.addPanel {
+	margin: 10px 0px 15px 0px;
+}
+
+.gwt-Button-remove {
+	width: 50px;
+}
+
+.noChange {
+	color: black;
+}
+
+.positiveChange {
+	color: green;
+}
+
+.negativeChange {
+	color: red;
+}
+
+.imgLogo {
+	height: 27px;
 }

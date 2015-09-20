@@ -37,15 +37,26 @@ public class StockWatcher implements EntryPoint {
    * Entry point method.
    */
   public void onModuleLoad() {
+	  
     // Create table for stock data.
     stocksFlexTable.setText(0, 0, "Symbol");
     stocksFlexTable.setText(0, 1, "Price");
     stocksFlexTable.setText(0, 2, "Change");
     stocksFlexTable.setText(0, 3, "Remove");
+    
+    //Add styles to elements in the sock list table
+    stocksFlexTable.setCellPadding(6);
+    stocksFlexTable.getRowFormatter().addStyleName(0, "watchListHeader");
+    stocksFlexTable.addStyleName("watchList");
+    stocksFlexTable.getCellFormatter().addStyleName(0, 1, "watchListPriceColumn");
+    stocksFlexTable.getCellFormatter().addStyleName(0, 2, "watchListChangeColumn");
+    stocksFlexTable.getCellFormatter().addStyleName(0, 3, "watchListRemoveColumn");
 
     // Assemble Add Stock panel.
+    newSymbolTextBox.getElement().setPropertyString("placeholder", "Enter stock symbol");
     addPanel.add(newSymbolTextBox);
     addPanel.add(addStockButton);
+    addPanel.addStyleName("addPanel");
 
     // Assemble Main panel.
     mainPanel.add(stocksFlexTable);
@@ -62,7 +73,9 @@ public class StockWatcher implements EntryPoint {
     Timer refreshTimer = new Timer() {
 		@Override
 		public void run() {
-			refreshWatchList();
+			//Update only necessary when list is not empty
+			if (!stocks.isEmpty())
+				refreshWatchList();
 		}
     };
     refreshTimer.scheduleRepeating(REFRESH_INTERVAL);
@@ -110,9 +123,14 @@ public class StockWatcher implements EntryPoint {
 	int row = stocksFlexTable.getRowCount();
 	stocks.add(symbol);
 	stocksFlexTable.setText(row, 0, symbol);
+	stocksFlexTable.setWidget(row, 2, new Label());
+	stocksFlexTable.getCellFormatter().addStyleName(row, 1, "watchListPriceColumn");
+	stocksFlexTable.getCellFormatter().addStyleName(row, 2, "watchListChangeColumn");
+	stocksFlexTable.getCellFormatter().addStyleName(row, 3, "watchListRemoveColumn");
 	
 	//Add a button to remove this stock from the table
 	Button removeStockButton = new Button("x");
+	removeStockButton.addStyleDependentName("remove");
 	removeStockButton.addClickHandler(new ClickHandler() {
 		
 		
@@ -184,10 +202,19 @@ public class StockWatcher implements EntryPoint {
 	
 	//Fills the fields of the table with the new values
 	stocksFlexTable.setText(row, 1, priceText);
-	stocksFlexTable.setText(row, 2, changeText + " (" + changePercentText + "%)");
+	Label changeWidget = (Label)stocksFlexTable.getWidget(row, 2);
+	changeWidget.setText(changeText + " (" + changePercentText + "%)");
 	
+	//Change the color of text in the Change field based on its value
+	String changeStyleName = "noChange";
+	if (stockPrice.getChangePercent() < -0.1f) {
+		changeStyleName = "negativeChange";
+	} else if (stockPrice.getChangePercent() > 0.1f) {
+		changeStyleName = "positiveChange";
+	}
+	
+	changeWidget.setStyleName(changeStyleName);
   }
-
 }
 
 
